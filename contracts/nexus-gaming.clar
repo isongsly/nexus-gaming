@@ -117,3 +117,46 @@
     (<= (len attributes) u10)
   )
 )
+
+(define-private (is-valid-world-access (worlds (list 10 uint)))
+  (and 
+    (>= (len worlds) u1)
+    (<= (len worlds) u10)
+    (fold check-world-exists worlds true)
+  )
+)
+
+(define-private (check-world-exists (world-id uint) (valid bool))
+  (and valid (is-some (get-world-details world-id)))
+)
+
+;; NFT Definitions
+(define-non-fungible-token nexus-asset uint)
+(define-non-fungible-token nexus-avatar uint)
+
+;; Asset Metadata
+(define-map nexus-asset-metadata 
+  { token-id: uint }
+  { 
+    name: (string-ascii 50),
+    description: (string-ascii 200),
+    rarity: (string-ascii 20),
+    power-level: uint,
+    world-id: uint,
+    attributes: (list 10 (string-ascii 20)),
+    experience: uint,
+    level: uint
+  }
+)
+
+;; Avatar System
+(define-map avatar-metadata
+  { avatar-id: uint }
+  {
+    name: (string-ascii 50),
+    level: uint,
+    experience: uint,
+    achievements: (list 20 (string-ascii 50)),
+    equipped-assets: (list 5 uint),
+    world-access: (list 10 uint)
+  })
